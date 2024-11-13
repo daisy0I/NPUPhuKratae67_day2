@@ -1,42 +1,63 @@
+// App.jsx (React)
+
+import React, { useState, useEffect } from 'react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import './App.css';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Label } from 'recharts';
-
-function generateRandomData() {
-  const startDate = new Date('2024-02-14T00:00:00Z'); // Start date
-  const endDate = new Date('2024-02-15T00:00:00Z'); // End date (two days later)
-  const intervalMinutes = 15; // Time interval in minutes
-
-  const data = [];
-  let currentTime = startDate;
-
-  while (currentTime <= endDate) {
-      const timestamp = currentTime.toISOString(); // Convert to ISO string
-      const x = Math.random() // Random value for x
-
-      data.push({ timestamp, x });
-
-      // Increment time by the specified interval
-      currentTime = new Date(currentTime.getTime() + intervalMinutes * 60 * 1000);
-  }
-
-  return data;
-}
-
 function App() {
-  
-  const data = generateRandomData();
-  return (<>
-    <LineChart width={1000} height={300} data={data}>
-    <CartesianGrid strokeDasharray="3 3" />
-    <XAxis dataKey="timestamp" />
-    <YAxis yAxisId="left">
-        <Label value="mm/s" position="insideLeft" angle={-90} />
-    </YAxis>
-    <Tooltip />
-    <Legend />  
-    <Line type="monotone" dataKey="x" stroke="#8884d8" yAxisId="left" dot={false} />
-    </LineChart></>
-  );
+    const [apiKey, setApiKey] = useState('');
+    const [data, setData] = useState(null);
+    const [ws, setWs] = useState(null);
+
+    useEffect(() => {
+        if (ws) {
+            ws.onmessage = (event) => {
+                const parsedData = JSON.parse(event.data);
+                setData(parsedData);
+            };
+        }
+    }, [ws]);
+
+    const connect = (event) => {
+        event.preventDefault();
+        const socket = new WebSocket('ws://technest.ddns.net:8001/ws');
+        socket.onopen = () => {
+            socket.send(apiKey);
+        };
+        setWs(socket);
+    };
+
+    return (
+        <div>
+            <h1>WebSocket Real-time Data</h1>
+            <form onSubmit={connect}>
+                <label>API Key:</label>
+                <input
+                    type="text"
+                    value={apiKey}
+                    onChange={(e) => setApiKey(e.target.value)}
+                    autoComplete="off"
+                />
+                <button type="submit">Connect</button>
+            </form>
+            <pre id="messages">{data && JSON.stringify(data, null, 2)}</pre>
+
+            {data && (
+                <ResponsiveContainer width="100%" height={400}>
+                    <LineChart data={[data]}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="Cycle Count" />
+                        <YAxis />
+                        <Tooltip />
+                        <Legend />
+                        <Line type="monotone" dataKey="Energy Consumption.Power" stroke="#8884d8" />
+                        <Line type="monotone" dataKey="Pressure" stroke="#82ca9d" />
+                        <Line type="monotone" dataKey="Force" stroke="#ff7300" />
+                        <Line type="monotone" dataKey="Position of the Punch" stroke="#387908" />
+                    </LineChart>
+                </ResponsiveContainer>
+            )}
+        </div>
+    );
 }
 
 export default App;

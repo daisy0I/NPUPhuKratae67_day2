@@ -1,31 +1,97 @@
-.App {
+/* App.css */
+
+/* เพิ่มความหรูหราให้กับหน้าเว็บ */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f7fb;
+  margin: 0;
+  padding: 0;
+}
+
+/* กำหนดสไตล์ส่วนหัว */
+h1 {
   text-align: center;
+  color: #4a90e2;
+  margin-top: 30px;
+  font-size: 2.5rem;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* ฟอร์มการเชื่อมต่อ */
+form {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  align-items: center;
+  margin: 20px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* ป้ายข้อความและอินพุต */
+label {
+  font-size: 1.1rem;
+  margin-right: 10px;
+  color: #333;
+}
+
+input[type="text"] {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  margin-right: 10px;
+  width: 250px;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #4a90e2;
   color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
 }
 
-.App-link {
-  color: #61dafb;
+button:hover {
+  background-color: #3578d4;
 }
 
-.heart {
-  color: #ff0000;
+/* ส่วนข้อความที่แสดงผล */
+#messages {
+  margin: 30px auto;
+  max-width: 800px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
 
-.small {
-  font-size: 0.75rem;
+/* สไตล์สำหรับกราฟ */
+.recharts-wrapper {
+  margin: 40px auto;
+  max-width: 900px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2rem;
+  }
+
+  form {
+    flex-direction: column;
+  }
+
+  input[type="text"] {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  button {
+    width: 100%;
+  }
 }
